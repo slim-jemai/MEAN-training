@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FoodService } from 'src/app/services/food.service';
 import { Food } from 'src/app/shared/models/Food';
-
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -10,11 +10,20 @@ import { Food } from 'src/app/shared/models/Food';
 export class HomeComponent implements OnInit {
 
   foods:Food[] = [];
-  constructor(private foodService:FoodService) {
-    this.foods = foodService.getAll();
+  constructor(private foodService:FoodService, activatedRoute:ActivatedRoute) {
+    activatedRoute.params.subscribe((params)=>{
+      if(params.searchTerm)
+      this.foods = foodService.getAllFoodBySearchTerm(params.searchTerm); 
+      else
+      this.foods = foodService.getAll();
+    
+    })
   }
+  
+    
 
   ngOnInit(): void {
   }
+
 
 }
