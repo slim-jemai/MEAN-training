@@ -28,8 +28,8 @@ export class FoodService {
   }
 
 
-  getFoodById(foodId:string){
-    return this.getAll().find(food => food.id==foodId);
+  getFoodById(foodId:string):Food{
+    return this.getAll().find(food => food.id==foodId)?? new Food();
   } 
 
 }
