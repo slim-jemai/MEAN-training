@@ -15,7 +15,7 @@ export class FoodService {
   getAll(): Observable<Food[]> {
     return this.http.get<Food[]>(FOODS_URL);
   }
-  getAllFoodsBySearchTerm(searchTerm: string) {
+  getAllFoodsBySearchTerm(searchTerm: string):Observable<Food[]> {
     return this.http.get<Food[]>(FOODS_BY_SEARCH_URL + searchTerm);
   }
 
