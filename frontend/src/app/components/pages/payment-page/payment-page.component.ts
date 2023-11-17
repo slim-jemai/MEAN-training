@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { onErrorResumeNext } from 'rxjs';
+import { CartService } from 'src/app/services/cart.service';
 import { OrderService } from 'src/app/services/order.service';
 import { Order } from 'src/app/shared/models/Order';
 
@@ -11,7 +14,9 @@ import { Order } from 'src/app/shared/models/Order';
 export class PaymentPageComponent implements OnInit {
 
   order:Order = new Order();
-  constructor(orderService: OrderService, router: Router) {
+  constructor(private orderService: OrderService, 
+    router: Router, private cartService: CartService,
+    private toastrService: ToastrService) {
       orderService.getNewOrderForCurrentUser().subscribe({
         next: (order) => {
           this.order = order;
@@ -23,6 +28,30 @@ export class PaymentPageComponent implements OnInit {
 
    }
 
+  payOrder(){
+
+    this.order.paymentId='static payment string';
+    this.orderService.payOrderAndSave(this.order).subscribe({
+      next:(orderId)=>{
+        this.cartService.clearCart();
+        this.toastrService.success(
+          'Payment Saved Successfully',
+          'Success'
+        )
+
+      },
+      error: (error)=>{
+        this.toastrService.error(
+          'Payment Save Failed',
+          'Error'
+        )
+        console.log(error);
+      }
+    });
+    
+    
+    
+  };
   ngOnInit(): void {
   }
 
