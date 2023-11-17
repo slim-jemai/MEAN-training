@@ -15,7 +15,7 @@ export class PaymentPageComponent implements OnInit {
 
   order:Order = new Order();
   constructor(private orderService: OrderService, 
-    router: Router, private cartService: CartService,
+    private router: Router, private cartService: CartService,
     private toastrService: ToastrService) {
       orderService.getNewOrderForCurrentUser().subscribe({
         next: (order) => {
@@ -34,6 +34,7 @@ export class PaymentPageComponent implements OnInit {
     this.orderService.payOrderAndSave(this.order).subscribe({
       next:(orderId)=>{
         this.cartService.clearCart();
+        this.router.navigateByUrl('/track/' + orderId);
         this.toastrService.success(
           'Payment Saved Successfully',
           'Success'
